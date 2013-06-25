@@ -36,11 +36,13 @@ The more normal use cases for this library is to expose the power of the unix co
 The logic is very simple : the function creates a web server which for every requests spawns a process that executes the unix command feeding the request's POST input stream to the standard input of that process and taking the standard output of the process and making it the POST request's result stream.
 The request's path is used to extract an "args" parameter which is assumed to be a multi-value parameter, so we map its values into the sort program's argument list.
 
-The code of the inner command (webCommand) is very simple just 4 lines are enough to do all that - given existing stream functionality:
-
-    var spawn = require('child_process').spawn,
-	child = require('event-stream').child,
-	proc = child(spawn(cmd, args));
-    ins.pipe(proc)
-       .pipe(outs);
-
+The code of the inner command (webCommand) is very simple just 5 lines are enough to do all that - given existing stream functionality:
+```
+_.webCommand = function(cmd, args, ins, outs) {
+  var spawn = require('child_process').spawn,
+      child = require('event-stream').child,
+      proc = child(spawn(cmd, args));
+  ins.pipe(proc)
+     .pipe(outs);
+}
+```
