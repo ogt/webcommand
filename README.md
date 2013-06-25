@@ -1,4 +1,4 @@
-Allows easy exposure of unix command line utilities as web services
+Unix command line utilities as web services
 ==
 
 ## Synopsis
