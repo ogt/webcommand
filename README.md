@@ -3,7 +3,8 @@ Unix command line utilities as web services
 
 ## Synopsis
 
-This module provides two functions that allow the exposure of any unix command utility as an HTTP server mapping the commands stdin and stdout to the webserver in out and the url's path to the uitilities arguments.
+This module provides functions that allow the exposure of any unix command utility as an HTTP server mapping the commands stdin and stdout to the webserver in out and the url's path to the uitilities arguments.
+There are three functions `createCommandServer`, `webCommand` and `createCommandClient`.
 
 #Description
 Here is a silly example to sort /etc/passwd by the user number (3rd column) by 
@@ -43,19 +44,3 @@ The code of the inner command (webCommand) is very simple just 4 lines are enoug
        .pipe(res);
 
 
-You can use the service using curl as follows ( assume a sort server):
-```
->curl --data-binary @- "http://sorter.herokuapp.com/?args=-t&args=,&args=-k&args=3&args=-n"
-boo,*,23
-foo,*,32
-poo,*,3
-doo,*,2
-^D
-doo,*,2
-poo,*,3
-boo,*,23
-foo,*,32
->
-```
-This simple facility is run as a free heroku app - this means that occassionally you may hit a 20 seconds delay - if there has been no activity for a while.
-This also means that the resources available aren't much - if you run sort with large inputs - you will probably run the server out of memory and you will make the server unavailable for others. So I would appreciate if you make light use only for the service
