@@ -1,0 +1,16 @@
+{
+  "name": "webcommand",
+  "description": "Utility that exposes unix commands as web services",
+  "version": "0.0.0",
+  "repository": {
+    "url": "git://github.com/ogt/webcommand.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tap": "~0.2.5"
+  }
+}
