@@ -1,21 +1,21 @@
 _ = (function () {
 var _ = {}
 
-_.webCommand = function(cmd, req, res) {
-  var parse = require('url').parse,
-      spawn = require('child_process').spawn,
-      child = require('event-stream').child;
-  var args = parse(req.url,true, true).query.args,
+_.webCommand = function(cmd, args, ins, outs) {
+  var spawn = require('child_process').spawn,
+      child = require('event-stream').child,
       proc = child(spawn(cmd, args));
-  req.pipe(proc)
-     .pipe(res);
+  ins.pipe(proc)
+     .pipe(outs);
 }
 
 _.createCommandServer = function(cmd, htmlfile) {
   var parse = require('url').parse;
   return createServer(function(req,res) {
-    if (parse(req.url).method == 'POST') {
-      webCommand(cmd,req,res);
+    var parsedUrl = parse(req.url,true, true);
+    if (parsedUrl.method == 'POST') {
+      var args = parsedUrl.query.args,
+      webCommand(cmd,args,req,res);
       console.log('Executing',cmd,args);
     }
     else if (htmlfile)// GET

@@ -37,11 +37,11 @@ The request's path is used to extract an "args" parameter which is assumed to be
 
 The code of the inner command (webCommand) is very simple just 4 lines are enough to do all that - given existing stream functionality:
 
-    var args = parse(req.url,true, true).query.args,
-    proc = child(spawn(cmd, args));
-    req.pipe(proc)
-       .pipe(res);
-
+    var spawn = require('child_process').spawn,
+	child = require('event-stream').child,
+	proc = child(spawn(cmd, args));
+    ins.pipe(proc)
+       .pipe(outs);
 
 You can use the service using curl as follows ( assume a sort server):
 ```
