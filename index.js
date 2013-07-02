@@ -1,4 +1,4 @@
-_ = (function () {
+module = module.exports = _ = (function () {
 var _ = {}
 
 _.webCommand = function(cmd, args, ins, outs) {
@@ -9,27 +9,26 @@ _.webCommand = function(cmd, args, ins, outs) {
      .pipe(outs);
 }
 
+
 _.createCommandServer = function(cmd, htmlfile) {
-  var parse = require('url').parse;
-  return createServer(function(req,res) {
-    var parsedUrl = parse(req.url,true, true);
-    if (parsedUrl.method == 'POST') {
-      var args = parsedUrl.query.args,
-      webCommand(cmd,args,req,res);
-      console.log('Executing',cmd,args);
+  var parse = require('url').parse,
+      createServer = require('http').createServer,
+      createReadStream = require('fs').createReadStream;
+  return createServer(function (req, res) {
+    if (req.method == 'POST') {
+      var parsedUrl = parse(req.url,true, true);
+      if (!cmd)  cmd = parsedUrl.pathname.replace('/','');
+      if (!htmlfile)  htmlfile = './index.html';
+      if (parsedUrl.query.args == '') args = null
+      else args = [].concat(parsedUrl.query.args);
+      if (args) console.log('Executing',cmd,' with args ', args);
+      else console.log('Executing '+cmd);
+      _.webCommand(cmd,args,req,res);
     }
-    else if (htmlfile)// GET
+    else // GET
       createReadStream(htmlfile).pipe(res);
   });
 }
-
-_.createCommandClient = function(options, args, cb)
-  var request = require('http').request;
-  options.method = 'POST';
-  options.path = '/?'+args.map(function(a) { return 'args='+a;}).join('&');
-  return req = request(options, cb)
-});
-
 
 return _;
 })();
