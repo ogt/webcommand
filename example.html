@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Command Server</title>
+    <style>
+        .arguments {
+            width: 100%;
+            height: 100%;
+        }
+        .fill {
+            width: 100%;
+            height: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <form  >
+    <table class="fill">
+        <tr>
+            <td style="width: 50%">
+                <table class="fill">
+                    <tr "height: 1%">
+                        <td>
+                            <label for="cmd">command</label>
+                            <button class="go" id="btnSubmit">Execute Command &gt;</button>
+                            <input id="cmd" class="arguments" type="text" value="execute" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10px;">&nbsp;</td>
+                    </tr>
+                    <tr style="height: 9%">
+                        <td>
+                            <label for="arguments">parameters (1 per line)</label>
+                            <textarea id="arguments" class="arguments" >-t
+,
+-k
+3
+-n
+-r</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10px;">&nbsp;</td>
+                    </tr>
+                    <tr style="height: 90%">
+                        <td>
+                            <label for="input">input</label><br>
+                            <textarea id="input" class="input fill">boo,*,23
+foo,*,32
+poo,*,3
+doo,*,2</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="fill">
+                    <tr style="height: 100%">
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="copyBack">&lt;</button><br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 50%">
+                <label for="output">output</label><br>
+                <textarea id="output" class="output fill"></textarea>
+            </td>
+        </tr>
+    </table>
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $('body').append($('<a href="https://github.com/ogt/sorter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>'));
+            $('body').append($('<h3>Unix sort as a web service</h3>'));
+            $('body').append($('<a href="https://github.com/ogt/sorter">Check out the project home for details</p>'));
+        });
+        $('#btnSubmit').click(function () {
+            var args = $('#arguments').val().split('\n');
+            $.ajax({
+              url: '/'+$('#cmd').val() + '?' + args.map(function(a) { return 'args='+a;}).join('&') ,
+              type: 'POST',
+              data: $('#input').val()
+            }).done(function (data) { 
+              $('#output').val((data));
+            }).fail(function (arg1, arg2) { 
+              alert(JSON.stringify(arg1));
+            });
+            return false;
+        });
+
+    </script>
+</body>
+</html>
