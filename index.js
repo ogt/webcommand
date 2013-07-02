@@ -14,6 +14,13 @@ _.createCommandServer = function(cmd, htmlfile) {
   var parse = require('url').parse,
       createServer = require('http').createServer,
       createReadStream = require('fs').createReadStream;
+
+  process.on('uncaughtException', function (err) {
+    try {
+      console.log('error: ' + (err.stack || err))
+    } catch (e) {}
+  });
+
   return createServer(function (req, res) {
     if (req.method == 'POST') {
       var parsedUrl = parse(req.url,true, true);
