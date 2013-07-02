@@ -18,7 +18,6 @@ _.createCommandServer = function(cmd, htmlfile) {
     if (req.method == 'POST') {
       var parsedUrl = parse(req.url,true, true);
       if (!cmd)  cmd = parsedUrl.pathname.replace('/','');
-      if (!htmlfile)  htmlfile = './index.html';
       if (parsedUrl.query.args == '') args = null
       else args = [].concat(parsedUrl.query.args);
       if (args) console.log('Executing',cmd,' with args ', args);
@@ -26,6 +25,7 @@ _.createCommandServer = function(cmd, htmlfile) {
       _.webCommand(cmd,args,req,res);
     }
     else // GET
+      if (!htmlfile)  htmlfile = './index.html';
       createReadStream(htmlfile).pipe(res);
   });
 }
