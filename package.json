@@ -9,7 +9,9 @@
   "scripts": {
     "test": "tap test/*.js"
   },
-  "dependencies": {},
+  "dependencies": {
+	  "event-stream":"*"
+  },
   "devDependencies": {
     "tap": "~0.2.5"
   }
