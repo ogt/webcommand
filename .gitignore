@@ -1,0 +1,7 @@
+.*
+!/.coverignore
+!/.gitignore
+!/.jshintrc
+cover_html/
+node_modules/
+Gemfile.lock
