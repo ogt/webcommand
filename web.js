@@ -15,11 +15,8 @@ app.get('/', function(req,res) {
 	});
 
 app.post('/index.html', function(req,res){
-	 req.on('error', function(error){
-		    console.log("req Error: "+error);
-		});
-	 res.on('error', function(error){
-		    console.log("res Error: "+error);
+	res.on('error', function(error){
+		    console.log(error);
 		});
 	commandServer.webCommand('sort',req.query.args.split(' '), req, res);
 });
