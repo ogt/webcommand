@@ -4,9 +4,6 @@
 
 /*.exe
 
-/node_modules/.bin
-
-/node_modules/event-stream
-/node_modules/tap
+/node_modules
 
 /*.project
