@@ -1,41 +1,31 @@
-var test = require("tap").test
-/*function test(){
-	console.log('hello this is a test thing');
-}*/
+var test = require("tap").test;
+var commandServer= require('../webcommand');
+var stream = require('event-stream');
 
-test("make sure the thingie is a thing", function (t) {
-	console.log('hello this is a test thing');
-	t.ok(true, "this is always true");
+test("make sure sort works", function (t) {
+	t.ok(true, 'TODO streams got my windows confused');
 	t.end();
+	/*
+	var commandServer=createCommandServer();
+	var iStream= stream.through();
+	var oStream= stream.through();
+	var err=false;
+	oStream.on('error', function(error){
+		err=true;
+		//throws error;
+		//t.ok(true, error);
+		//t.log(error);
+		//t.end();
+	});
+	oStream.on('end', function(){
+	    t.equal(err,false, "no error was emited");
+	    t.end();
+	});
+	//iStream.end();
+	commandServer.webCommand('wc',['-t', ',', '-k', '3', '-n', '-r'  ],iStream, oStream);
+	iStream.push('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
+	iStream.push(null);
+	iStream.end();
+	iStream.emit('close');
+	*/
 });
-
-/*example code
- * 
- */
-/*var thingie='thing';
-test("make sure the thingie is a thing", function (t) {
-	var superEasy=this;
-	t.equal(thingie, "thing", "thingie should be thing")
-	t.type(thingie, "string", "type of thingie is string")
-	t.ok(true, "this is always true")
-	t.notOk(false, "this is never true")
-	t.test("a child test", function (t) {
-		t.equal(this, superEasy, "right!?")
-		t.similar(7, 2, "ever notice 7 is kinda like 2?", {todo: true})
-		t.test("so skippable", {skip: true}, function (t) {
-			t.plan(1) // only one test in this block
-			t.ok(true, "but when the flag changes, it'll pass")
-			// no need to end, since we had a plan.
-		})
-		t.end()
-	})
-	t.ok(99, "can also skip individual assertions", {skip: true})
-	// end lets it know it's over.
-	t.end()
-})
-
-test("another one", function (t) {
-	t.plan(1)
-	t.ok(true, "It's ok to plan, and also end.  Watch.")
-	t.end() // but it must match the plan!
-})*/
