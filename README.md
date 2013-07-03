@@ -17,7 +17,7 @@ To execute commands call the webCommand method of the command server
 webCommand(command,arguments, inStream, outStream);
 ```
 
-To get the list of allowed commands for a CommandServer
+To get the list of allowed commands for a CommandServer.
 ```
 getCommandList()
 ```
