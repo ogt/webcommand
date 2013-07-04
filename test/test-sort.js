@@ -3,9 +3,9 @@ var commandServer= require('../webcommand');
 var stream = require('event-stream');
 
 test("make sure sort works", function (t) {
-	t.ok(true, 'TODO streams got my windows confused');
+	/*t.ok(true, 'TODO streams got my windows confused');
 	t.end();
-	/*
+	*/
 	var commandServer=createCommandServer();
 	var iStream= stream.through();
 	var oStream= stream.through();
@@ -27,5 +27,5 @@ test("make sure sort works", function (t) {
 	iStream.push(null);
 	iStream.end();
 	iStream.emit('close');
-	*/
+	
 });
