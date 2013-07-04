@@ -14,7 +14,7 @@ test("make sure awk works", function (t) {
 	    t.equal(err,false, "no error was emited");
 	    t.end();
 	});
-	commandServer.webCommand('awk',['-F\':\'', '{ print $1 }'  ],iStream, oStream);
+	commandServer.webCommand('awk',['-F:', '{ print $1 }'  ],iStream, oStream);
 	iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
 	iStream.write(null);
 });
