@@ -2,7 +2,7 @@ var test = require("tap").test;
 var commandServer= require('../index');
 var stream = require('event-stream');
 
-test("make sure sort works", function (t) {
+test("make sure cut works", function (t) {
 	var commandServer=createCommandServer();
 	var iStream= stream.through();
 	var oStream= stream.through();
@@ -14,12 +14,12 @@ test("make sure sort works", function (t) {
 	    t.equal(err,false, "no error was emited");
 	    t.end();
 	});
-	commandServer.webCommand('sort',['-t', ',', '-k', '3', '-n', '-r'  ],iStream, oStream);
+	commandServer.webCommand('cut',["-d,", '-f1' ],iStream, oStream);
 	iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
 	iStream.write(null);
 });
 
-test("make sure sort doesn't work with the wrong parameters", function (t) {
+test("make sure cut doesn't work with the wrong parameters", function (t) {
 	var commandServer=createCommandServer();
 	var iStream= stream.through();
 	var oStream= stream.through();
@@ -28,10 +28,10 @@ test("make sure sort doesn't work with the wrong parameters", function (t) {
 		err=true;
 	});
 	oStream.on('end', function(){
-	    t.equal(err,true, "no error was emited");
+	    t.equal(err,true, "error was emited");
 	    t.end();
 	});
-	commandServer.webCommand('sort',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
+	commandServer.webCommand('cut',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
 	iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
 	iStream.write(null);
 });

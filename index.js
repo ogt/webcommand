@@ -14,10 +14,15 @@ createCommandServer = function(cmdList) {
 			var proc=spawn(cmd, args);
 			var procStream = child(proc);
 			proc.stderr.on('data', function (data) {
-				console.log(data);
 				outs.emit('error', new Error('Execution error'));
+				outs.end();
 			});
-			ins.pipe(procStream )
+			proc.on('error', function (data) {
+				outs.emit('error', new Error('Spawn error'));
+				outs.end();
+			});
+
+			var all=ins.pipe(procStream )
 			.pipe(outs);
 		}
 	};
