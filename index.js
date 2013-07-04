@@ -1,41 +1,40 @@
-module = module.exports = _ = (function () {
-var _ = {}
+var spawn = require('child_process').spawn;
+var child = require('event-stream').child;
 
-_.webCommand = function(cmd, args, ins, outs) {
-  var spawn = require('child_process').spawn,
-      child = require('event-stream').child,
-      proc = child(spawn(cmd, args));
-  ins.pipe(proc)
-     .pipe(outs);
-}
+createCommandServer = function(cmdList) {
+	if(!cmdList){
+		cmdList=['sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
+	}
 
+	function webCommand (cmd, args, ins, outs) {
+		if(cmdList.indexOf(cmd)===-1){
+			outs.emit('error', new Error('Illegal command'));
+			outs.end();
+		}else{
+			var proc=spawn(cmd, args);
+			var procStream = child(proc);
+			proc.stderr.on('data', function (data) {
+				outs.emit('error', new Error('Execution error'));
+				outs.end();
+			});
+			proc.on('error', function (data) {
+				outs.emit('error', new Error('Spawn error'));
+				outs.end();
+			});
 
-_.createCommandServer = function(cmd, htmlfile) {
-  var parse = require('url').parse,
-      createServer = require('http').createServer,
-      createReadStream = require('fs').createReadStream;
+			var all=ins.pipe(procStream )
+			.pipe(outs);
+		}
+	};
 
-  process.on('uncaughtException', function (err) {
-    try {
-      console.log('error: ' + (err.stack || err))
-    } catch (e) {}
-  });
+	function getCommandList(){
+		return cmdList;
+	}
 
-  return createServer(function (req, res) {
-    if (req.method == 'POST') {
-      var parsedUrl = parse(req.url,true, true);
-      if (!cmd)  cmd = parsedUrl.pathname.replace('/','');
-      if (parsedUrl.query.args == '') args = null
-      else args = [].concat(parsedUrl.query.args);
-      if (args) console.log('Executing',cmd,' with args ', args);
-      else console.log('Executing '+cmd);
-      _.webCommand(cmd,args,req,res);
-    }
-    else // GET
-      if (!htmlfile)  htmlfile = './index.html';
-      createReadStream(htmlfile).pipe(res);
-  });
-}
+	return {webCommand :webCommand,
+		getCommandList:getCommandList
+	};
 
-return _;
-})();
+};
+
+exports.createCommandServer=createCommandServer; 
