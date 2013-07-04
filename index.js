@@ -18,7 +18,7 @@ createCommandServer = function(cmdList) {
 				outs.emit('error', new Error('Execution error'));
 				outs.end();
 			});
-			/*proc.on('exit', function(msg){
+			/*procStream.on('exit', function(msg){
 				console.log('exiting now!');
 				console.log(msg);
 				if(msg!==0){
@@ -26,26 +26,15 @@ createCommandServer = function(cmdList) {
 					outs.end();
 				}
 			});*/
-            var all=ins.pipe(procStream )
-            .pipe(outs);
 
-            all.on('uncaughtException', function (data) {
-                    outs.emit('error', new Error('Spawn error'));
-                    outs.end();
-            });
-
-			/*
-			proc.stderr.on('data', function (data) {
-				outs.emit('error', new Error('Execution error'));
-				outs.end();
-			});
-			proc.on('error', function (data) {
+			proc.on('uncaughtException', function (data) {
 				outs.emit('error', new Error('Spawn error'));
 				outs.end();
 			});
-			 */
-			/*ins.pipe(procStream )
-			.pipe(outs);*/
+			ins.pipe(procStream )
+			.pipe(outs);
+
+			
 		}
 	};
 
