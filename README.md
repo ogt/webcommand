@@ -55,3 +55,16 @@ app.post('/index.html', function(req,res){
 app.listen(port);
 console.log('Listening on port: '+port);
 ```
+
+## Installation 
+
+To run locally:
+
+    > hub clone ogt/webcommand && cd webcommand
+    > npm install
+    > node test.js&
+    > open localhost:8000
+
+You can test the default command (sort) or replace any command that is in your path. Remember that if if you are to use a command that doesn't need stdin you will need to clear the input textarea - otherwise you will get a pipe error.
+
+

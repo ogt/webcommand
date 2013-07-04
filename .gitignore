@@ -1,9 +1,8 @@
-/.metadata
-
-/.settings
-
+/.*
+/*.log
+!/.coverignore
+!/.gitignore
+!/.jshintrc
+/node_modules/
 /*.exe
-
-/node_modules
-
 /*.project
