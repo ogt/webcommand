@@ -1,5 +1,5 @@
 var test = require("tap").test;
-var commandServer= require('../webcommand');
+var commandServer= require('../index');
 var stream = require('event-stream');
 
 test("make sure the createCommandServer returns an object with the proper methodes", function (t) {
