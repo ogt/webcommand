@@ -13,16 +13,16 @@ createCommandServer = function(cmdList) {
 		}else{
 			var proc=spawn(cmd, args);
 			var procStream = child(proc);
-			proc.stderr.on('data', function (data) {
+			/*proc.stderr.on('data', function (data) {
 				outs.emit('error', new Error('Execution error'));
 				outs.end();
-			});
-			proc.on('error', function (data) {
+			});*/
+			procStream.on('uncaughtException', function (data) {
 				outs.emit('error', new Error('Spawn error'));
 				outs.end();
 			});
 
-			var all=ins.pipe(procStream )
+			ins.pipe(procStream )
 			.pipe(outs);
 		}
 	};
