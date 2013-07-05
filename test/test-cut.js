@@ -7,14 +7,15 @@ test("make sure cut works", function (t) {
 	var iStream= stream.through();
 	var oStream= stream.through();
 	var err=false;
-	oStream.on('error', function(error){
+	var cStream=commandServer.webCommand('cut',["-d,", '-f1' ],iStream, oStream);
+	cStream.on('error', function(error){
 		err=true;
 	});
-	oStream.on('end', function(){
+	cStream.on('end', function(){
 	    t.equal(err,false, "no error was emited");
 	    t.end();
 	});
-	commandServer.webCommand('cut',["-d,", '-f1' ],iStream, oStream);
+	
 	iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
 	iStream.write(null);
 });
@@ -24,14 +25,15 @@ test("make sure cut doesn't work with the wrong parameters", function (t) {
 	var iStream= stream.through();
 	var oStream= stream.through();
 	var err=false;
-	oStream.on('error', function(error){
+	var cStream=commandServer.webCommand('cut',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
+	
+	cStream.on('error', function(error){
 		err=true;
 	});
-	oStream.on('end', function(){
+	cStream.on('end', function(){
 	    t.equal(err,true, "error was emited");
 	    t.end();
 	});
-	commandServer.webCommand('cut',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
 	iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
 	iStream.write(null);
 });
