@@ -1,5 +1,6 @@
 Unix command line utilities as web services
 ==
+[![Build Status](https://travis-ci.org/MauritsMeijer/webcommand.png)](https://travis-ci.org/MauritsMeijer/webcommand)
 
 ## Synopsis
 
