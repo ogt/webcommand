@@ -30,14 +30,14 @@ test("make sure the createCommandServer doesn't allow unlisted commands", functi
     var iStream= stream.through();
     var oStream= stream.through();
     var err=false;
-    var cStream=commandServer.webCommand('tail',[],iStream, oStream);
-    cStream.on('error', function(){
+    oStream.on('error', function(){
         err=true;
     });
-    cStream.on('end', function(){
+    oStream.on('end', function(){
         t.equal(err,true, "error was emited");
         t.end();
     });
+    commandServer.webCommand('tail',[],iStream, oStream);
     
     iStream.emit('close');
 });

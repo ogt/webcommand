@@ -6,23 +6,17 @@ module.exports = function(cmdList) {
         cmdList=['sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
     }
     function webCommand (cmd, args, ins, outs) {
-        var result= require('event-stream').through();
         var proc, procStream;
         if(cmdList.indexOf(cmd)===-1){
-            setTimeout(function(){
-                result.emit('error', new Error('Illegal command'));
-                result.end();
-            },10);
+            outs.emit('error', new Error('Illegal command'));
+            outs.end();
         }else{
             try{            
                 proc=spawn(cmd, args);
                 procStream = child(proc);
             }catch(e){
-                setTimeout(function(){
-                    result.emit('error', new Error('error spawning command'));
-                    result.end();
-                },10);
-                return result;
+                outs.emit('error', new Error('error spawning command'));
+                outs.end();
             }
             proc.stderr.on('data', function () {
             });
@@ -30,9 +24,9 @@ module.exports = function(cmdList) {
                 console.log('exiting now!');
                 console.log(msg);
                 if(msg!==0){
-                    result.emit('error', new Error('Spawn error'));
+                    outs.emit('error', new Error('Spawn error'));
                 }
-                result.end();
+                outs.end();
             });
             proc.on('uncaughtException', function () {
             });
@@ -49,7 +43,6 @@ module.exports = function(cmdList) {
             ins.pipe(procStream )
             .pipe(outs);
         }
-        return result;
     }
 
     function getCommandList(){
