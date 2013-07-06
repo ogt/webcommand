@@ -1,5 +1,5 @@
 var test = require("tap").test;
-var commandServer= require('../index')();
+var commandServer= require('../')();
 var stream = require('event-stream');
 
 test("make sure sort works", function (t) {
