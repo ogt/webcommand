@@ -1,14 +1,13 @@
 var test = require("tap").test;
-var commandServer= require('../index');
+var commandServer= require('../index')();
 var stream = require('event-stream');
 
 test("make sure sed works", function (t) {
-    var commandServer=createCommandServer();
     var iStream= stream.through();
     var oStream= stream.through();
     var err=false;
     var cStream=commandServer.webCommand('sed',['s/foo/bar/' ],iStream, oStream);
-    cStream.on('error', function(error){
+    cStream.on('error', function(){
         err=true;
     });
     cStream.on('end', function(){
@@ -22,12 +21,11 @@ test("make sure sed works", function (t) {
 });
 
 test("make sure sed doesn't work with the wrong parameters", function (t) {
-    var commandServer=createCommandServer();
     var iStream= stream.through();
     var oStream= stream.through();
     var err=false;
     var cStream=commandServer.webCommand('sed',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
-    cStream.on('error', function(error){
+    cStream.on('error', function(){
         err=true;
     });
     cStream.on('end', function(){

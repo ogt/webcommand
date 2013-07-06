@@ -1,14 +1,13 @@
 var test = require("tap").test;
-var commandServer= require('../index');
+var commandServer= require('../index')();
 var stream = require('event-stream');
 
 test("make sure sort works", function (t) {
-    var commandServer=createCommandServer();
     var iStream= stream.through();
     var oStream= stream.through();
     var err=false;
     var cStream=commandServer.webCommand('sort',['-t', ',', '-k', '3', '-n', '-r'  ],iStream, oStream);
-    cStream.on('error', function(error){
+    cStream.on('error', function(){
         err=true;
     });
     cStream.on('end', function(){
@@ -21,12 +20,11 @@ test("make sure sort works", function (t) {
 });
 
 test("make sure sort doesn't work with the wrong parameters", function (t) {
-    var commandServer=createCommandServer();
     var iStream= stream.through();
     var oStream= stream.through();
     var err=false;
     var cStream=commandServer.webCommand('sort',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream);
-    cStream.on('error', function(error){
+    cStream.on('error', function(){
         err=true;
     });
     cStream.on('end', function(){
