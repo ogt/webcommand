@@ -28,32 +28,33 @@ The 'normal' use case for this library is to expose the power of the unix comman
 In this example a post of a form in index.html will call sort and stream the results back to browser.
 
 ```
-var express = require('express');
-var app = express();
-var webcommand=require('./lib/index.js');
+var express = require('express'),
+    webCommand = require('../')(),
+    stream = require('event-stream');
 
 var port = process.env.PORT || 8000;
-
-var commandServer=webcommand.createCommandServer();
+var app = express();
 
 app.get('/getCommands', function(req,res) {
-	  res.send(JSON.stringify(commandServer.getCommandList()));
-	});
-
+      res.send(JSON.stringify(webCommand.getCommandList()));
+    });
 
 app.get('/', function(req,res) {
-	  res.sendfile('index.html');
-	});
+      res.sendfile('example.html');
+    });
 
-app.post('/index.html', function(req,res){
-	res.on('error', function(error){
-		    console.log(error);
-		});
-	commandServer.webCommand('sort',req.query.args.split(' '), req, res);
+app.post('/*', function(req,res){
+    var cmd = req.path.replace('/','');
+        args = [].concat(req.query.args);
+        cStream= stream.through();
+    if (req.query.args === '') args = null;
+
+    cStream.on('error', function(err) {
+        console.error(err);
+    });
+    webCommand.webCommand(cmd,args, req, res, cStream);
+
 });
-
-app.listen(port);
-console.log('Listening on port: '+port);
 ```
 
 ## Installation 

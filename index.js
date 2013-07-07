@@ -2,33 +2,27 @@ var spawn = require('child_process').spawn;
 var child = require('event-stream').child;
 
 module.exports = function(cmdList) {
-    cmdList = cmdList || ['sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
-    function webCommand (cmd, args, ins, outs) {
+    cmdList = cmdList || ['ls', 'sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
+    function webCommand (cmd, args, ins, outs, ctrls) {
         var proc, procStream;
         if(cmdList.indexOf(cmd)===-1){
-            outs.emit('error', new Error('Illegal command'));
-            outs.end();
+            ctrls.emit('error', new Error('Illegal command'));
+            ctrls.end();
         }else{
+            if (args) console.log('Executing',cmd,' with args ', args);
+            else console.log('Executing '+cmd);
             try{            
                 proc=spawn(cmd, args);
                 procStream = child(proc);
             }catch(e){
-                outs.emit('error', new Error('Error spawning command: '+cmd));
-                outs.end();
+                ctrls.emit('error', new Error('Error spawning command: '+cmd));
+                ctrls.end();
             }
-            proc.stderr.on('data', function () {
-            });
             proc.on('exit', function(msg){
-                console.log('exiting now!');
-                console.log(msg);
-                if(msg!==0){
-                    outs.emit('error', new Error('Spawn error'));
+                if(msg!==0) {
+                    ctrls.emit('error', new Error('Command '+cmd+' exiting with code '+msg));
                 }
-                outs.end();
-            });
-            process.on('uncaughtException', function(error) {
-                outs.emit('error', error);
-                outs.end();
+                ctrls.end();
             });
             ins.pipe(procStream )
                .pipe(outs);

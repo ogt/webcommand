@@ -12,7 +12,7 @@ test("make sure the createCommandServer returns an object with the proper method
 test("make sure the createCommandServer has a default list of commands", function (t) {
     var commandServer= require('../')();
     var commandList=commandServer.getCommandList();
-    t.deepEqual(commandList, ['sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'], "default command list is used ");
+    t.ok(commandList.indexOf('sort')!== -1);
     t.end();
 });
 
@@ -29,15 +29,16 @@ test("make sure the createCommandServer doesn't allow unlisted commands", functi
     var commandServer= require('../')(customCommandList);
     var iStream= stream.through();
     var oStream= stream.through();
+    var cStream= stream.through();
     var err=false;
-    oStream.on('error', function(){
+    cStream.on('error', function(){
         err=true;
     });
-    oStream.on('end', function(){
+    cStream.on('end', function(){
         t.equal(err,true, "error was emited");
         t.end();
     });
-    commandServer.webCommand('tail',[],iStream, oStream);
+    commandServer.webCommand('tail',[],iStream, oStream, cStream);
     
     iStream.emit('close');
 });
