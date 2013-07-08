@@ -2,7 +2,7 @@ var spawn = require('child_process').spawn;
 var child = require('event-stream').child;
 
 module.exports = function(cmdList) {
-    cmdList = cmdList || ['ls', 'sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
+    cmdList = cmdList || ['sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
     function webCommand (cmd, args, ins, outs, ctrls) {
         var proc, procStream;
         if(cmdList.indexOf(cmd)===-1){
