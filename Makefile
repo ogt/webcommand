@@ -7,4 +7,5 @@ test:   lint
 lint:
 	$(LINT) index.js
 	$(LINT) test/*.js
+	$(LINT) example/*.js
   
