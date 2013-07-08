@@ -94,8 +94,8 @@ doo,*,2</textarea>
               data: $('#input').val()
             }).done(function (data) { 
               $('#output').val((data));
-            }).fail(function (arg1, arg2, arg3) { 
-              alert(JSON.stringify(arg3));
+            }).fail(function (arg1) { 
+              alert(JSON.stringify(arg1));
             });
             return false;
         });
