@@ -68,4 +68,3 @@ To run locally:
 
 You can test the default command (sort) or replace any command that is in your path. Remember that if if you are to use a command that doesn't need stdin you will need to clear the input textarea - otherwise you will get a pipe error.
 
-
