@@ -5,22 +5,25 @@ Unix command line utilities as web services
 ## Synopsis
 
 This module provides functions that allow the exposure of any unix command utility to node.js mapping the commands stdin and stdout to the webserver in out and the url's path to the uitilities arguments.
-There are three functions `createCommandServer`, `webCommand` and `getCommandList`.
+There are two functions  `webCommand` and `getCommandList`. 
 
 #Description
-To create a command server call createCommandServer. You may provide an array with the allowed commands. 
+To use this module, you need to first
 ```
-createCommandServer([commandList]);
+var webcommand = require('webcommand')([commandList]);
 ```
 
-To execute commands call the webCommand method of the command server
+The webcommand creates spawns a separate process, pipe-ing the input and output  streams as needed. It also accepts 
+a ctrlStream to emit errors and signal the end of the command.
+Command is sth that can be exec-ed so it has to be found in the current process's path
+Arguments is the list of arguments that we are passing to the process.
 ```
-webCommand(command,arguments, inStream, outStream);
+webcommand.webCommand(command,arguments, inStream, outStream, ctrlStream);
 ```
 
 To get the list of allowed commands for a CommandServer.
 ```
-getCommandList()
+webcommand.getCommandList()
 ```
 The 'normal' use case for this library is to expose the power of the unix command utilities within a more restricted enviorment, for example the browser. For example you can easily create an awk javascript function (replace sort above with awk..). Note that while these unix facilities are obtaining significant user access (even readonly) to the server, the server would probably be a rooted slug - e.g. a heroku app - whose disk is containing no user information besides the code it serves.
 
@@ -59,12 +62,14 @@ app.post('/*', function(req,res){
 
 ## Installation 
 
-To run locally:
+To run locally the example:
 
     > hub clone ogt/webcommand && cd webcommand
     > npm install
-    > node test.js&
-    > open localhost:8000
+    > make test
+    > node example/example.js&
+    > open localhost:8000/getCommands &
+    > open localhost:8000 
 
 You can test the default command (sort) or replace any command that is in your path. Remember that if if you are to use a command that doesn't need stdin you will need to clear the input textarea - otherwise you will get a pipe error.
 
