@@ -5,7 +5,7 @@
   "repository": {
     "url": "git://github.com/ogt/webcommand.git"
   },
-  "main": "webcommand.js",
+  "main": "index.js",
   "scripts": {
     "test": "make test"
   },
