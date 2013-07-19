@@ -1,7 +1,6 @@
 var test = require("tap").test,
     parseUrl = require('../').parseUrl,
-    generateUrl = require('../').generateUrl,
-    deepEqual = require('deep-equal');
+    generateUrl = require('../').generateUrl;
 
 var testCases =  [
     {
@@ -112,14 +111,7 @@ testCases.forEach(function(tcase) {
         if (testUrlToObj) {
             var obj = parseUrl(tcase.url);
             deepDelete(obj,'parsedUrl');
-            var ok = deepEqual(obj,tcase.obj);
-            if (!ok) {
-                console.log('Oject Looked like this:');
-                console.log(obj);
-                console.log('Oject should have looked like this instead:');
-                console.log(tcase.obj);
-            }
-            t.ok(ok,tcase.msg+' (urlParse)');
+            t.deepEqual(obj,tcase.obj, tcase.msg+' (urlParse)');
         }
         if (testObjToUrl) {
             var url = generateUrl(tcase.obj);
