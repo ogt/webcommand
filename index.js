@@ -34,14 +34,16 @@ exports = module.exports = function(cmdList) {
                 ctrls.emit('error', err);
                 ctrls.end();
             }
-            proc.on('exit', function(msg){
-                if(msg!==0) {
-                    err = new Error('Command '+cmd+' exiting with code '+msg);
+            proc.on('exit', function(exit_code){
+            //    console.log('exit code : ['+JSON.stringify(exit_code)+']');
+                if(exit_code !== 0) {
+                    err = new Error('Command '+cmd+' exiting with code '+exit_code);
                     err.name = 'COMMAND_EXITED_ABNORMALLY';
                     ctrls.emit('error', err);
                 }
                 ctrls.end();
             });
+
             ins.pipe(procStream )
                .pipe(outs);
         }
