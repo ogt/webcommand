@@ -11,6 +11,18 @@ exports = module.exports = function(cmdList) {
             ctrls.emit('error', err);
             ctrls.end();
         }else{
+            process.on('uncaughtException', function(err) {
+                if (err.message.indexOf('ENOENT') != -1) {
+                    err = new Error('Error spawning command');
+                    err.name = 'COMMAND_NOT_FOUND';
+                } else {
+                    err = new Error('Unknown error');
+                    err.name = 'UNKOWN_ERROR';
+                }
+                ctrls.emit('error', err);
+                ctrls.end();
+            });
+
             if (args) console.log('Executing',cmd,' with args ', args);
             else console.log('Executing '+cmd);
             try{            
