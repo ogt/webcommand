@@ -1,7 +1,7 @@
 {
   "name": "webcommand",
   "description": "Utility that exposes unix commands as web services",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "repository": {
     "url": "git://github.com/ogt/webcommand.git"
   },
