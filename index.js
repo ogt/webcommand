@@ -43,9 +43,10 @@ exports = module.exports = function(cmdList) {
                     err = new Error('Command '+cmd+' exiting with code '+exit_code);
                     err.name = 'COMMAND_EXITED_ABNORMALLY';
                     ctrls.emit('error', err);
-                    ctrls.end();
                     outs.end();
                 }
+                ctrls.end();
+          
             });
             ins.pipe(procStream )
                .pipe(outs);

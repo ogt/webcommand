@@ -11,7 +11,7 @@ test("make sure head works", function (t) {
     cStream.on('error', function(){
         err=true;
     });
-    oStream.on('end', function(){
+    cStream.on('end', function(){
         t.equal(err,false, "no error was emited");
         t.end();
     });
