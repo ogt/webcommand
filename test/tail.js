@@ -11,7 +11,7 @@ test("make sure tail works", function (t) {
     cStream.on('error', function(){
         err=true;
     });
-    cStream.on('end', function(){
+    oStream.on('end', function(){
         t.equal(err,false, "no error was emited");
         t.end();
     });

@@ -10,13 +10,13 @@ test("make sure cut works", function (t) {
     cStream.on('error', function(){
         err=true;
     });
-    cStream.on('end', function(){
+    oStream.on('end', function(){
         t.equal(err,false, "no error was emited");
         t.end();
     });
     commandServer.webCommand('cut',["-d,", '-f1' ],iStream, oStream, cStream);
     iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
-    iStream.write(null);
+    iStream.emit('close');
 });
 
 test("make sure cut doesn't work with the wrong parameters", function (t) {
@@ -33,5 +33,5 @@ test("make sure cut doesn't work with the wrong parameters", function (t) {
     });
     commandServer.webCommand('cut',['-t', ',', '-klalala', '3', '-n', '-r'  ],iStream, oStream, cStream);
     iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
-    iStream.write(null);
+    iStream.emit('close');
 });
