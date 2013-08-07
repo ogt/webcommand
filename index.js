@@ -12,12 +12,11 @@ exports = module.exports = function(cmdList) {
             ctrls.end();
             outs.end();
         }else{
-            process.on('uncaughtException', function(err) {
+            process.on('uncaughtException', function(e) {
+                err = e;
                 if (err.message.indexOf('ENOENT') != -1) {
-                    err = new Error('Error spawning command');
                     err.name = 'COMMAND_NOT_FOUND';
                 } else {
-                    err = new Error('Unknown error');
                     err.name = 'UNKOWN_ERROR';
                 }
                 ctrls.emit('error', err);
@@ -31,7 +30,7 @@ exports = module.exports = function(cmdList) {
                 proc=spawn(cmd, args);
                 procStream = child(proc);
             }catch(e){
-                err = new Error('Error spawning command');
+                err = e;
                 err.name = 'COMMAND_NOT_FOUND';
                 ctrls.emit('error', err);
                 ctrls.end();
