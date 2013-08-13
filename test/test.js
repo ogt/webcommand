@@ -29,6 +29,7 @@ test("make sure the createCommandServer doesn't allow unlisted commands", functi
     var commandServer= require('../')(customCommandList);
     var iStream= stream.through();
     var oStream= stream.through();
+    var eStream= stream.through();
     var cStream= stream.through();
     var err=false;
     cStream.on('error', function(){
@@ -38,7 +39,7 @@ test("make sure the createCommandServer doesn't allow unlisted commands", functi
         t.equal(err,true, "error was emited");
         t.end();
     });
-    commandServer.webCommand('tail',[],iStream, oStream, cStream);
+    commandServer.webCommand('tail',[],iStream, oStream, eStream, cStream);
     
     iStream.emit('close');
 });
@@ -48,6 +49,7 @@ var commandServer=require('../')();
 test("make sure oStream can be used to detect end for normal operation", function (t) {
     var iStream= stream.through();
     var oStream= stream.through();
+    var eStream= stream.through();
     var cStream= stream.through();
     var err=false;
     cStream.on('error', function(){
@@ -58,7 +60,7 @@ test("make sure oStream can be used to detect end for normal operation", functio
         t.equal(err,false, "no error was emited");
         t.end();
     });
-    commandServer.webCommand('awk',['-F:', '{ print $1 }'  ],iStream, oStream, cStream);
+    commandServer.webCommand('awk',['-F:', '{ print $1 }'  ],iStream, oStream, eStream, cStream);
     //commandServer.webCommand('awk',['-F:', '{ print $1 }'  ],iStream, oStream);
     iStream.write('boo,*,23\nfoo,*,32\npoo,*,3\ndoo,*,2');
     iStream.emit('close');

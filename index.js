@@ -3,7 +3,7 @@ var child = require('event-stream').child;
 
 exports = module.exports = function(cmdList) {
     cmdList = cmdList || ['cat', 'sort', 'awk', 'sed', 'grep', 'uniq', 'head', 'tail', 'cut', 'fmt', 'wc'];
-    function webCommand (cmd, args, ins, outs, ctrls) {
+    function webCommand (cmd, args, ins, outs, errs, ctrls) {
         var proc, procStream, err;
         if(cmdList.indexOf(cmd)===-1){
             err = new Error('Illegal command');
@@ -47,6 +47,7 @@ exports = module.exports = function(cmdList) {
                 ctrls.end();
           
             });
+            proc.stderr.pipe(errs);
             ins.pipe(procStream )
                .pipe(outs);
 
