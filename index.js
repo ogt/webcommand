@@ -10,7 +10,6 @@ exports = module.exports = function(cmdList) {
             err.name = 'COMMAND_NOT_ALLOWED';
             ctrls.emit('error', err);
             ctrls.end();
-            outs.end();
         }else{
             process.on('uncaughtException', function(e) {
                 err = e;
@@ -21,7 +20,6 @@ exports = module.exports = function(cmdList) {
                 }
                 ctrls.emit('error', err);
                 ctrls.end();
-                outs.end();
             });
 
             if (args) console.log('Executing',cmd,' with args ', args);
@@ -34,7 +32,6 @@ exports = module.exports = function(cmdList) {
                 err.name = 'COMMAND_NOT_FOUND';
                 ctrls.emit('error', err);
                 ctrls.end();
-                outs.end();
             }
             proc.on('exit', function(exit_code){
             //    console.log('exit code : ['+JSON.stringify(exit_code)+']');
@@ -42,10 +39,11 @@ exports = module.exports = function(cmdList) {
                     err = new Error('Command '+cmd+' exiting with code '+exit_code);
                     err.name = 'COMMAND_EXITED_ABNORMALLY';
                     ctrls.emit('error', err);
-                    outs.end();
+                    ctrls.end();
                 }
-                ctrls.end();
-          
+                else {
+                    ctrls.end();
+                }
             });
             proc.stderr.pipe(errs);
             ins.pipe(procStream )

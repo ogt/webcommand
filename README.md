@@ -59,8 +59,7 @@ app.post('/*', function(req,res){
 
 });
 ```
-Note that in the event of an error the only reliable way to detect the end of the webcommand is via the `cStream`'s end. (`cStream.on('end')`). When no errors you can use either `cStream` or `oStream`'s end to detect the error of the webcommand.
-
+Note that the only reliable way to detect the end of the webcommand is via the `cStream`'s end. (`cStream.on('end')`). 
 ## Installation 
 
 To run locally the example:
